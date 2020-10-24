@@ -1,31 +1,37 @@
 package com.golabiusz.snake;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.media.SoundPool;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+
+import java.io.IOException;
 
 public class SnakeGame extends SurfaceView implements Runnable {
   private final int MILLIS_IN_SECOND = 1000;
+  private final int NUM_BLOCKS_WIDE = 40;
 
   private Thread gameThread = null;
   private volatile boolean isPaused;
   private boolean isPlaying = false;
+  private long nextFrameTime;
 
   private Canvas canvas;
   private Paint paint;
 
-  private long fps;
-
   private Point screenSize;
+  private int numBlocksHigh;
 
   private SoundPool sp;
-  private int eatSoundId = -1;
   private int crashSoundId = -1;
+  private int eatSoundId = -1;
 
   private Snake snake;
   private Apple apple;
@@ -38,11 +44,14 @@ public class SnakeGame extends SurfaceView implements Runnable {
 
     this.screenSize = screenSize;
 
+    int blockSize = screenSize.x / NUM_BLOCKS_WIDE;
+    numBlocksHigh = screenSize.y / blockSize;
+
     paint = new Paint();
 
     this.loadSounds(context);
 
-    startGame();
+    newGame();
   }
 
   public void resume() {
@@ -64,37 +73,84 @@ public class SnakeGame extends SurfaceView implements Runnable {
   @Override
   public void run() {
     while (!isPaused) {
-      long frameStartTime = System.currentTimeMillis();
-
-      if (isPlaying) {
+      if (isPlaying && updateRequired()) {
         updateSnakePosition();
+        detectEating();
         detectCollisions();
       }
 
       draw();
-
-      long timeThisFrame = System.currentTimeMillis() - frameStartTime;
-      if (timeThisFrame > 0) {
-        fps = MILLIS_IN_SECOND / timeThisFrame;
-      }
     }
+  }
+
+  @Override
+  public boolean onTouchEvent(MotionEvent motionEvent) {
+    switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+      case MotionEvent.ACTION_UP:
+        if (!isPlaying) {
+          isPlaying = true;
+          newGame();
+
+          return true;
+        }
+
+        // Let the Snake class handle the input
+        break;
+
+      default:
+        break;
+    }
+
+    return true;
   }
 
   private void loadSounds(Context context) {
     sp = new SoundPoolBuilder().build();
 
-    // TODO load sounds
+    try {
+      AssetManager assetManager = context.getAssets();
+      AssetFileDescriptor descriptor;
+
+      descriptor = assetManager.openFd("snake_death.ogg");
+      crashSoundId = sp.load(descriptor, 0);
+
+      descriptor = assetManager.openFd("get_apple.ogg");
+      eatSoundId = sp.load(descriptor, 0);
+    } catch (IOException e) {
+      Log.e("error", "failed to load sound files");
+    }
   }
 
-  private void startGame() {
-    // TODO reset state
+  private void newGame() {
+    // reset the snake
+
+    // Get the apple ready for dinner
 
     bestScore = Math.max(bestScore, score);
     score = 0;
+
+    nextFrameTime = System.currentTimeMillis();
+  }
+
+  private boolean updateRequired() {
+    final int TARGET_FPS = 10;
+    long now = System.currentTimeMillis();
+
+    if (nextFrameTime <= now) {
+      nextFrameTime = now + MILLIS_IN_SECOND / TARGET_FPS;
+
+      return true;
+    }
+
+    return false;
   }
 
   private void updateSnakePosition() {
     // TODO update snake position
+  }
+
+  private void detectEating() {
+    // TODO detect snake ate apple
   }
 
   private void detectCollisions() {
@@ -113,26 +169,39 @@ public class SnakeGame extends SurfaceView implements Runnable {
   private void draw() {
     if (getHolder().getSurface().isValid()) {
       canvas = getHolder().lockCanvas();
-      canvas.drawColor(Color.argb(255, 243, 111, 36));
+      canvas.drawColor(Color.argb(255, 26, 128, 182));
       paint.setColor(Color.argb(255, 255, 255, 255));
 
-      drawApples();
-      drawSnake();
       drawHUD();
+      drawApple();
+      drawSnake();
+
+      if (!isPlaying) {
+        drawPauseMessage();
+      }
 
       getHolder().unlockCanvasAndPost(canvas);
     }
   }
 
-  private void drawApples() {
-    // TODO draw apples
+  private void drawHUD() {
+    paint.setTextSize(120);
+
+    canvas.drawText("" + score, 20, 120, paint);
+  }
+
+  private void drawApple() {
+    // TODO draw apple
   }
 
   private void drawSnake() {
     // TODO draw snake
   }
 
-  private void drawHUD() {
-    // TODO draw HUD
+  private void drawPauseMessage() {
+    paint.setColor(Color.argb(255, 255, 255, 255));
+    paint.setTextSize(250);
+
+    canvas.drawText("Tap To Play!", 200, 700, paint);
   }
 }
