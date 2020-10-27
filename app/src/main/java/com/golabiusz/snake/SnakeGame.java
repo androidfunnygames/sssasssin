@@ -51,6 +51,8 @@ public class SnakeGame extends SurfaceView implements Runnable {
 
     this.loadSounds(context);
 
+    apple = new Apple(context, new Point(NUM_BLOCKS_WIDE, numBlocksHigh), blockSize);
+
     newGame();
   }
 
@@ -124,7 +126,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
   private void newGame() {
     // reset the snake
 
-    // Get the apple ready for dinner
+    apple.spawn();
 
     bestScore = Math.max(bestScore, score);
     score = 0;
@@ -173,7 +175,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
       paint.setColor(Color.argb(255, 255, 255, 255));
 
       drawHUD();
-      drawApple();
+      apple.draw(canvas, paint);
       drawSnake();
 
       if (!isPlaying) {
@@ -188,10 +190,6 @@ public class SnakeGame extends SurfaceView implements Runnable {
     paint.setTextSize(120);
 
     canvas.drawText("" + score, 20, 120, paint);
-  }
-
-  private void drawApple() {
-    // TODO draw apple
   }
 
   private void drawSnake() {
