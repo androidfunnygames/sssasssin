@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-
+import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
 public class Apple {
@@ -14,27 +14,24 @@ public class Apple {
   // Not in pixels
   private Point location = new Point();
 
-  // The range of values we can choose from to spawn an apple
-  private Point spawnRange;
   private int size;
 
   private Bitmap bitmap;
 
-  Apple(Context context, Point spawnRange, int size) {
-    this.spawnRange = spawnRange;
+  Apple(@NotNull Context context, int size) {
     this.size = size;
     // Hide the apple off-screen until the game starts
     location.x = -10;
 
-    bitmap = Bitmap.createScaledBitmap(
-        BitmapFactory.decodeResource(context.getResources(), R.drawable.apple),
-        size,
-        size,
-        false
-    );
+    bitmap =
+        Bitmap.createScaledBitmap(
+            BitmapFactory.decodeResource(context.getResources(), R.drawable.apple),
+            size,
+            size,
+            false);
   }
 
-  public void spawn() {
+  public void spawn(Point spawnRange) {
     Random random = new Random();
     location.x = random.nextInt(spawnRange.x) + 1;
     location.y = random.nextInt(spawnRange.y - 1) + 1;
@@ -44,7 +41,7 @@ public class Apple {
     return location;
   }
 
-  void draw(Canvas canvas, Paint paint) {
+  void draw(@NotNull Canvas canvas, Paint paint) {
     canvas.drawBitmap(bitmap, location.x * size, location.y * size, paint);
   }
 }
