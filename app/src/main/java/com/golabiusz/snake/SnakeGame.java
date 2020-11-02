@@ -24,32 +24,29 @@ public class SnakeGame extends SurfaceView implements Runnable {
   private long nextFrameTime;
 
   private Canvas canvas;
-  private Paint paint;
+  private final Paint paint;
 
   private SoundPool sp;
   private int crashSoundId = -1;
   private int eatSoundId = -1;
 
-  private Snake snake;
-  private Apple apple;
+  private final Snake snake;
+  private final Apple apple;
 
   private int score = 0;
   private int bestScore = 0;
 
-  private int numBlocksHigh;
+  private final int horizontalScreenCenter;
   // How big is the entire grid
-  private Point furthestPoint;
-  // Where is the center of the screen horizontally in pixels?
-  // Used to detect which side of screen was pressed
-  private int halfWayPoint;
+  private final Point furthestPoint;
 
   public SnakeGame(Context context, @NotNull Point screenSize) {
     super(context);
 
+    horizontalScreenCenter = screenSize.x / 2;
     int blockSize = screenSize.x / NUM_BLOCKS_WIDE;
-    numBlocksHigh = screenSize.y / blockSize;
+    int numBlocksHigh = screenSize.y / blockSize;
     furthestPoint = new Point(NUM_BLOCKS_WIDE, numBlocksHigh);
-    halfWayPoint = furthestPoint.x * blockSize / 2;
 
     paint = new Paint();
 
@@ -124,7 +121,6 @@ public class SnakeGame extends SurfaceView implements Runnable {
     }
 
     if (snake.hasDied(furthestPoint)) {
-      // Pause the game ready to start again
       sp.play(crashSoundId, 1, 1, 0, 0, 1);
 
       isPlaying = false;
@@ -173,7 +169,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
           return true;
         }
 
-        if (motionEvent.getX() >= halfWayPoint) {
+        if (motionEvent.getX() >= horizontalScreenCenter) {
           snake.rotateRight();
         } else {
           snake.rotateLeft();

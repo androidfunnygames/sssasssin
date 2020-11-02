@@ -14,4 +14,5 @@ Game has been translated to:
 - Polish
 - Portuguese
 - Spanish
+
 more input is welcome :)

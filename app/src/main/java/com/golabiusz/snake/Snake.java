@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class Snake {
-  // For tracking movement Heading
   private enum Heading {
     UP,
     RIGHT,
@@ -19,30 +18,25 @@ public class Snake {
     LEFT
   }
 
-  // Start by heading to the right
-  private Heading heading = Heading.RIGHT;
+  private final Heading STARTING_HEADING = Heading.RIGHT;
+
+  private Heading heading = STARTING_HEADING;
 
   // The location in the grid of all the segments
-  private ArrayList<Point> segmentLocations;
+  private final ArrayList<Point> segmentLocations;
 
-  // How big is each segment of the snake?
-  private int segmentSize;
+  private final int segmentSize;
 
-  // A bitmap for each direction the head can face
   private Bitmap bitmapHeadRight;
   private Bitmap bitmapHeadLeft;
   private Bitmap bitmapHeadUp;
   private Bitmap bitmapHeadDown;
 
-  // A bitmap for the body
   private Bitmap bitmapBody;
 
   Snake(Context context, int segmentSize) {
-    // Initialize our ArrayList
     segmentLocations = new ArrayList<>();
 
-    // Initialize the segment size and movement
-    // range from the passed in parameters
     this.segmentSize = segmentSize;
 
     createBitmaps(context);
@@ -50,7 +44,6 @@ public class Snake {
 
   private void createBitmaps(@NotNull Context context)
   {
-    // Create and scale the bitmaps
     bitmapHeadRight = BitmapFactory.decodeResource(context.getResources(), R.drawable.head);
     bitmapHeadLeft = BitmapFactory.decodeResource(context.getResources(), R.drawable.head);
     bitmapHeadUp = BitmapFactory.decodeResource(context.getResources(), R.drawable.head);
@@ -82,13 +75,10 @@ public class Snake {
   }
 
   public void reset(@NotNull Point moveRange) {
-    // Reset the heading
-    heading = Heading.RIGHT;
+    heading = STARTING_HEADING;
 
-    // Delete the old contents of the ArrayList
     segmentLocations.clear();
 
-    // Start with a single snake segment
     segmentLocations.add(new Point(moveRange.x / 2, moveRange.y / 2));
   }
 

@@ -10,13 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
 public class Apple {
-  // The location of the apple on the grid
-  // Not in pixels
-  private Point location = new Point();
+  // The location of the apple on the grid (not in pixels)
+  private final Point location = new Point();
 
-  private int size;
+  private final int size;
 
-  private Bitmap bitmap;
+  private final Bitmap bitmap;
 
   Apple(@NotNull Context context, int size) {
     this.size = size;
@@ -31,7 +30,7 @@ public class Apple {
             false);
   }
 
-  public void spawn(Point spawnRange) {
+  public void spawn(@NotNull Point spawnRange) {
     Random random = new Random();
     location.x = random.nextInt(spawnRange.x) + 1;
     location.y = random.nextInt(spawnRange.y - 1) + 1;
