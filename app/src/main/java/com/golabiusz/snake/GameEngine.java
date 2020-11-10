@@ -37,14 +37,6 @@ class GameEngine extends SurfaceView implements Runnable {
     hud = new HUD(context, screenSize);
     apple = new Apple(context, blockSize);
     snake = new Snake(context, blockSize);
-
-    newGame();
-  }
-
-  private void newGame() {
-    gameState.startGame();
-    snake.reset(furthestPoint);
-    apple.spawn(furthestPoint);
   }
 
   @Override
@@ -97,6 +89,12 @@ class GameEngine extends SurfaceView implements Runnable {
     }
 
     return true;
+  }
+
+  private void newGame() {
+    gameState.startGame();
+    snake.reset(furthestPoint);
+    apple.spawn(furthestPoint);
   }
 
   void startThread() {
