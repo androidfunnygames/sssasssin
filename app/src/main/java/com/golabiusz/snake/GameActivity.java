@@ -5,8 +5,8 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 
-public class SnakeActivity extends Activity {
-  SnakeGame snakeGame;
+public class GameActivity extends Activity {
+  GameEngine gameEngine;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -16,22 +16,22 @@ public class SnakeActivity extends Activity {
     Point size = new Point();
     display.getSize(size);
 
-    snakeGame = new SnakeGame(this, size);
+    gameEngine = new GameEngine(this, size);
 
-    setContentView(snakeGame);
+    setContentView(gameEngine);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
 
-    snakeGame.resume();
+    gameEngine.startThread();
   }
 
   @Override
   protected void onPause() {
     super.onPause();
 
-    snakeGame.pause();
+    gameEngine.stopThread();
   }
 }

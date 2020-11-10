@@ -10,9 +10,11 @@ This project follows Google Java Style Guide.
 
 Game has been translated to:
 - English
+- French
 - German
 - Polish
 - Portuguese
 - Spanish
 
 more input is welcome :)
+
