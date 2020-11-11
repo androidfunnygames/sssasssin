@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Point;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,7 @@ class HUD {
 
   void draw(@NotNull Canvas canvas, @NotNull Paint paint, @NotNull GameState gameState) {
     paint.setColor(Color.argb(255, 255, 255, 255));
+    paint.setTextAlign(Align.LEFT);
     paint.setTextSize(textFormatting);
 
     canvas.drawText("Hi: " + gameState.getHighScore(), textFormatting, textFormatting, paint);
@@ -35,10 +37,11 @@ class HUD {
   }
 
   private void drawNewGameMessage(@NotNull Canvas canvas, @NotNull Paint paint) {
+    paint.setTextAlign(Align.CENTER);
     paint.setTextSize(textFormatting * 3);
     canvas.drawText(
         this.context.getResources().getString(R.string.tap_to_play),
-        screenWidth / 4,
+        screenWidth / 2,
         screenHeight / 2,
         paint);
   }
