@@ -22,9 +22,9 @@ class Renderer {
       canvas.drawColor(Color.argb(255, 26, 128, 182));
       paint.setColor(Color.argb(255, 255, 255, 255));
 
+      snake.draw(canvas, paint);
       hud.draw(canvas, paint, gameState);
       apple.draw(canvas, paint);
-      snake.draw(canvas, paint);
 
       surfaceHolder.unlockCanvasAndPost(canvas);
     }
