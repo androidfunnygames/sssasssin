@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tap_to_play">Dotknij, aby zagrać!</string>
+    <string name="money">Kasa</string>
+    <string name="tap_to_continue">70 milionów przejebał sssasssin…</string>
 </resources>

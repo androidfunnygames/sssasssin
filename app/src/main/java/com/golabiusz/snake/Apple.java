@@ -24,7 +24,7 @@ public class Apple {
 
     bitmap =
         Bitmap.createScaledBitmap(
-            BitmapFactory.decodeResource(context.getResources(), R.drawable.apple),
+            BitmapFactory.decodeResource(context.getResources(), R.drawable.moneybag),
             size,
             size,
             false);

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="tap_to_play">Appuyez pour jouer!</string>
+  <string name="money">Argent</string>
+  <string name="tap_to_continue">Appuyez pour continuer!</string>
 </resources>

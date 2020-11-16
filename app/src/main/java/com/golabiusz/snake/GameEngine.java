@@ -42,7 +42,7 @@ class GameEngine extends SurfaceView implements Runnable {
   @Override
   public void run() {
     while (gameState.isThreadRunning()) {
-      if (!gameState.isGameOver() && gameState.updateRequired()) {
+      if (!gameState.isPaused() && gameState.updateRequired()) {
         update();
       }
 
@@ -75,6 +75,8 @@ class GameEngine extends SurfaceView implements Runnable {
           newGame();
 
           return true;
+        } else if (gameState.isPaused() && hud.getPauseButton().contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
+          gameState.resume();
         }
 
         if (motionEvent.getX() >= horizontalScreenCenter) {

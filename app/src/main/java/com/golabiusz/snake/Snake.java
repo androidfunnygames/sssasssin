@@ -27,11 +27,7 @@ public class Snake {
 
   private final int segmentSize;
 
-  private Bitmap bitmapHeadRight;
-  private Bitmap bitmapHeadLeft;
-  private Bitmap bitmapHeadUp;
-  private Bitmap bitmapHeadDown;
-
+  private Bitmap bitmapHead;
   private Bitmap bitmapBody;
 
   Snake(Context context, int segmentSize) {
@@ -44,33 +40,10 @@ public class Snake {
 
   private void createBitmaps(@NotNull Context context)
   {
-    bitmapHeadRight = BitmapFactory.decodeResource(context.getResources(), R.drawable.head);
-    bitmapHeadLeft = BitmapFactory.decodeResource(context.getResources(), R.drawable.head);
-    bitmapHeadUp = BitmapFactory.decodeResource(context.getResources(), R.drawable.head);
-    bitmapHeadDown = BitmapFactory.decodeResource(context.getResources(), R.drawable.head);
-    bitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.body);
+    bitmapHead = BitmapFactory.decodeResource(context.getResources(), R.drawable.sssasssin);
+    bitmapBody = BitmapFactory.decodeResource(context.getResources(), R.drawable.moneybag);
 
-    // Modify the bitmaps to face the snake head in the correct direction
-    bitmapHeadRight = Bitmap.createScaledBitmap(bitmapHeadRight, segmentSize, segmentSize, false);
-
-    // A matrix for scaling
-    Matrix matrix = new Matrix();
-    matrix.preScale(-1, 1);
-
-    bitmapHeadLeft =
-        Bitmap.createBitmap(bitmapHeadRight, 0, 0, segmentSize, segmentSize, matrix, true);
-
-    // A matrix for rotating
-    matrix.preRotate(-90);
-    bitmapHeadUp =
-        Bitmap.createBitmap(bitmapHeadRight, 0, 0, segmentSize, segmentSize, matrix, true);
-
-    // Matrix operations are cumulative so rotate by 180 to face down
-    matrix.preRotate(180);
-    bitmapHeadDown =
-        Bitmap.createBitmap(bitmapHeadRight, 0, 0, segmentSize, segmentSize, matrix, true);
-
-    // Scale the body
+    bitmapHead = Bitmap.createScaledBitmap(bitmapHead, segmentSize, segmentSize, false);
     bitmapBody = Bitmap.createScaledBitmap(bitmapBody, segmentSize, segmentSize, false);
   }
 
@@ -202,29 +175,8 @@ public class Snake {
   }
 
   private void drawHead(Canvas canvas, Paint paint) {
-    Bitmap bitmap;
-
-    switch (heading) {
-      case UP:
-        bitmap = bitmapHeadUp;
-        break;
-
-      case DOWN:
-        bitmap = bitmapHeadDown;
-        break;
-
-      case LEFT:
-        bitmap = bitmapHeadLeft;
-        break;
-
-      case RIGHT:
-      default:
-        bitmap = bitmapHeadRight;
-        break;
-    }
-
     canvas.drawBitmap(
-        bitmap,
+        bitmapHead,
         segmentLocations.get(0).x * segmentSize,
         segmentLocations.get(0).y * segmentSize,
         paint);

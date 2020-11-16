@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 class GameState {
   private static volatile boolean isThreadRunning = false;
+  private static volatile boolean isPaused = true;
   private static volatile boolean isGameOver = true;
 
   private final SharedPreferences.Editor editor;
@@ -26,9 +27,11 @@ class GameState {
     nextFrameTime = System.currentTimeMillis();
     score = 0;
     isGameOver = false;
+    resume();
   }
 
   void endGame() {
+    pause();
     isGameOver = true;
 
     if (score > highScore) {
@@ -65,6 +68,18 @@ class GameState {
     isThreadRunning = false;
   }
 
+  boolean isPaused() {
+    return isPaused;
+  }
+
+  void pause() {
+    isPaused = true;
+  }
+
+  void resume() {
+    isPaused = false;
+  }
+
   boolean isGameOver() {
     return isGameOver;
   }
@@ -74,7 +89,12 @@ class GameState {
   }
 
   void increaseScore() {
-    score++;
+    score += 1000000;
+
+    int SCORE_TO_ACHIEVE = 70000000;
+    if (score == SCORE_TO_ACHIEVE) {
+      pause();
+    }
   }
 
   int getHighScore() {
